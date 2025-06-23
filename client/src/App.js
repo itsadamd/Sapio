@@ -1,12 +1,11 @@
 import React from 'react';
-import Search from './Search';
+import Main from './Main';
 
 function App() {
   return (
     <div>
-      <h1>Input Search Paramters</h1>
-      <Search />
-
+      <h1>Sapio</h1>
+      <Main />
     </div>
   )
 }
