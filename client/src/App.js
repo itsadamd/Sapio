@@ -3,11 +3,11 @@ import Main from './Main';
 
 function App() {
   return (
-    <div>
-      <h1>Sapio</h1>
+    <div className="bg-blue-200 min-h-screen">
       <Main />
     </div>
-  )
+  );
 }
+
 
 export default App;

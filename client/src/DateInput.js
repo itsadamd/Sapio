@@ -82,65 +82,99 @@ function DateInput({ formData, onChange }) {
         onChange({ ...formData, ...newValues });
     }
 
-    return (
-        <>
-            {/* Mode toggle */}
-            <div>
-                <label>
-                    <input
-                        type="radio"
-                        value="Fiscal"
-                        checked={formData.selectionMode === "Fiscal"}
-                        onChange={(e) => updateFormData({ selectionMode: e.target.value })}
-                    />
-                    Fiscal
-                </label>
-                <label>
-                    <input 
-                        type="radio"
-                        value="Date"
-                        checked={formData.selectionMode === "Date"}
-                        onChange={(e) => updateFormData({ selectionMode: e.target.value })}
-                    />
-                    Date
-                </label>
+return (
+    <div className="space-y-4">
+        <div className="flex items-stretch border border-gray-300 rounded-lg bg-white overflow-hidden">
+            
+            {/* Radio button with Date label */}
+            <label className="flex items-center gap-2 cursor-pointer whitespace-nowrap px-3 py-4 hover:bg-gray-100 transition-colors">
+                <input 
+                    type="radio"
+                    value="Date"
+                    checked={formData.selectionMode === "Date"}
+                    onChange={(e) => updateFormData({ selectionMode: e.target.value })}
+                    className="w-4 h-4 text-blue-600 focus:ring-blue-500 p-0"
+                />
+                <span className="text-gray-700 font-medium">Date</span>
+            </label>
+
+            {/* Start Date Picker */}
+            <div className="flex items-center flex-1 px-3 py-2 border-l border-gray-200">
+                <DatePicker
+                    selected={formData.startDate ? new Date(formData.startDate) : null}
+                    onChange={(date) => {
+                        const formatted = date.toISOString().split('T')[0];
+                        updateFormData({ startDate: formatted });
+                    }}
+                    placeholderText="Start Date"
+                    disabled={formData.selectionMode !== "Date"}
+                    className="w-full p-2 border-0 focus:ring-0 focus:outline-none disabled:bg-transparent disabled:cursor-not-allowed"
+                />
             </div>
 
-            {/* Date pickers (visible in Date mode) */}
-            <p>Start Date:</p>
-            <DatePicker
-                selected={formData.startDate}
-                onChange={(date) => updateFormData({ startDate: date })}
-                placeholderText="Enter Start Date"
-                disabled={formData.selectionMode !== "Date"}
-            />
-            <p>End Date:</p>
-            <DatePicker 
-                selected={formData.endDate}
-                onChange={(date) => updateFormData({ endDate: date })}
-                placeholderText="Enter End Date"
-                disabled={formData.selectionMode !== "Date"}
-            />
+            {/* "to" text */}
+            <div className="flex items-center px-3 py-2 border-l border-gray-200 bg-gray-50">
+                <span className="text-gray-500 font-medium">to</span>
+            </div>
 
-            {/* Fiscal inputs (visible in Fiscal mode) */}
-            <p>Start Quarter:</p>
-            <FiscalQuarterInput
-                disabled={formData.selectionMode !== "Fiscal"}
-                quarter={formData.startFiscalQuarter}
-                year={formData.startFiscalYear}
-                onQuarterChange={(val) => updateFormData({ startFiscalQuarter: val })}
-                onYearChange={(val) => updateFormData({ startFiscalYear: val })}
-            />
-            <p>End Quarter:</p>
-            <FiscalQuarterInput
-                disabled={formData.selectionMode !== "Fiscal"}
-                quarter={formData.endFiscalQuarter}
-                year={formData.endFiscalYear}
-                onQuarterChange={(val) => updateFormData({ endFiscalQuarter: val })}
-                onYearChange={(val) => updateFormData({ endFiscalYear: val })}
-            />
-        </>
-    );
+            {/* End Date Picker */}
+            <div className="flex items-center flex-1 px-3 py-2 border-l border-gray-200">
+                <DatePicker 
+                    selected={formData.endDate}
+                    onChange={(date) => {
+                        const formatted = date.toISOString().split('T')[0];
+                        updateFormData({ endDate: formatted });
+                    }}
+                    placeholderText="End Date"
+                    disabled={formData.selectionMode !== "Date"}
+                    className="w-full p-2 border-0 focus:ring-0 focus:outline-none disabled:bg-transparent disabled:cursor-not-allowed"
+                />
+            </div>
+        </div>
+    
+        <div className="flex items-stretch border border-gray-300 rounded-lg bg-white">
+
+            {/* Radio button with Fiscal label */}
+            <label className="flex items-center gap-2 cursor-pointer whitespace-nowrap px-3 py-4 hover:bg-gray-100 transition-colors">
+                <input
+                    type="radio"
+                    value="Fiscal"
+                    checked={formData.selectionMode === "Fiscal"}
+                    onChange={(e) => updateFormData({ selectionMode: e.target.value })}
+                    className="w-4 h-4 text-blue-600 focus:ring-blue-500 p-0"
+                />
+                <span className="text-gray-700 font-medium">Fiscal</span>
+            </label>
+
+            {/* Fiscal Inputs Start*/}
+            <div className="flex items-center flex-1 px-3 py-2 border-l border-gray-200">
+                <FiscalQuarterInput
+                    disabled={formData.selectionMode !== "Fiscal"}
+                    quarter={formData.startFiscalQuarter}
+                    year={formData.startFiscalYear}
+                    onQuarterChange={(val) => updateFormData({ startFiscalQuarter: val })}
+                    onYearChange={(val) => updateFormData({ startFiscalYear: val })}
+                />
+            </div>
+
+            {/* "to" text */}
+            <div className="flex items-center px-3 py-2 border-l border-gray-200 bg-gray-50">
+                <span className="text-gray-500 font-medium">to</span>
+            </div>
+
+            {/* Fiscal Input End*/}
+            <div className="flex items-center flex-1 px-3 py-2 border-l border-gray-200">
+                <FiscalQuarterInput
+                    disabled={formData.selectionMode !== "Fiscal"}
+                    quarter={formData.endFiscalQuarter}
+                    year={formData.endFiscalYear}
+                    onQuarterChange={(val) => updateFormData({ endFiscalQuarter: val })}
+                    onYearChange={(val) => updateFormData({ endFiscalYear: val })}
+                />
+            </div>
+        </div>
+    </div>
+);
 }
 
 export default DateInput;

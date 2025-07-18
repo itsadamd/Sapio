@@ -5,13 +5,13 @@ const app = express();
 
 // helping function imports
 
-const { handleDataRequest } = require('./controllers/dataController');
+const { handleQueryRequest } = require('./controllers/dataController');
 
 // Enable cross-origin requests from React
 app.use(cors());
 app.use(express.json());
 
-app.post('/api/get-data', handleDataRequest);
+app.post('/api/get-data', handleQueryRequest);
 
 app.get('/api/ping', (req, res) => {
   res.json({ message: 'Hello World!' });

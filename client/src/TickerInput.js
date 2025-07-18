@@ -63,8 +63,71 @@ function TickerInput({ formData, onChange }) {
     }
 
     return (
-        <>
-            {/* Radio buttons for selecting the ticker input mode */}
+    <div className="space-y-4">
+
+        <div className="flex items-stretch border border-gray-300 rounded-lg bg-white">
+                    
+            {/* By Input Radio Button */}
+            <label className="flex items-center gap-2 cursor-pointer whitespace-nowrap px-3 py-4 hover:bg-gray-100 transition-colors">
+                <input
+                    type="radio"
+                    value="Manual"
+                    checked={formData.selectionMode === "Manual"}
+                    onChange={(e) => updateFormData({ selectionMode: e.target.value })}
+                    className="w-4 h-4 text-blue-600 focus:ring-blue-500 p-0"
+                />
+                <span className="text-gray-700 font-medium">By Input</span>
+            </label>
+
+            {/* Multi-select dropdown for entering tickers manually */}
+            <CreatableSelect
+                isMulti
+                options={inputOptions}
+                value={selected}
+                onChange={(e) => {
+                    setSelected(e);
+                    updateFormData({ tickers: e.map(opt => opt.value) });
+                }}
+                onCreateOption={handleCreate}
+                placeholder="Enter tickers (e.g., AAPL, TSLA)..."
+                isDisabled={formData.selectionMode !== "Manual"}
+                className="w-full p-2 border-0 focus:ring-0 focus:outline-none disabled:bg-transparent disabled:cursor-not-allowed"
+            />
+        </div>
+
+        <div className="flex items-stretch border border-gray-300 rounded-lg bg-white">
+                    
+            {/* File Radio Button */}
+            <label className="flex items-center gap-2 cursor-pointer whitespace-nowrap px-3 py-4 hover:bg-gray-100 transition-colors">
+                <input
+                    type="radio"
+                    value="File"
+                    checked={formData.selectionMode === "File"}
+                    onChange={(e) => updateFormData({ selectionMode: e.target.value })}
+                    className="w-4 h-4 text-blue-600 focus:ring-blue-500 p-0"
+                />
+                <span className="text-gray-700 font-medium">Upload File</span>
+            </label>
+
+            {/* Multi-select dropdown for entering tickers manually */}
+            <button>Upload file</button>
+        </div>
+
+        <div className="flex items-stretch border border-gray-300 rounded-lg bg-white">
+                    
+            {/* By Input Radio Button */}
+            <label className="flex items-center gap-2 cursor-pointer whitespace-nowrap px-3 py-4 hover:bg-gray-100 transition-colors">
+                <input
+                    type="radio"
+                    value="All"
+                    checked={formData.selectionMode === "All"}
+                    onChange={(e) => updateFormData({ selectionMode: e.target.value })}
+                    className="w-4 h-4 text-blue-600 focus:ring-blue-500 p-0"
+                />
+                <span className="text-gray-700 font-medium">Grab data for all companies</span>
+            </label>
+        </div>
+            {/* Radio buttons for selecting the ticker input mode
             <div>
                 <label>
                     <input
@@ -95,23 +158,9 @@ function TickerInput({ formData, onChange }) {
                 </label>
             </div>
 
-            {/* Multi-select dropdown for entering tickers manually */}
-            <CreatableSelect
-                isMulti
-                options={inputOptions}
-                value={selected}
-                onChange={(e) => {
-                    setSelected(e);
-                    updateFormData({ tickers: e.map(opt => opt.value) });
-                }}
-                onCreateOption={handleCreate}
-                placeholder="Enter tickers (e.g., AAPL, TSLA)..."
-                isDisabled={formData.selectionMode !== "Manual"}
-            />
-
-            {/* File upload button (logic not implemented) */}
-            <button>upload file</button>
-        </>
+            /* File upload button (logic not implemented) 
+            <button>upload file</button>*/}
+        </div>
     );
 }
 

@@ -1,62 +1,27 @@
+const axios = require('axios')
 
-async function handleDataRequest(req, res) {
+const SUPABASE_URL = 'https://iebcjbvhfzizesjmrwrz.supabase.co/rest/v1/'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImllYmNqYnZoZnppemVzam1yd3J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyNTAxMDAsImV4cCI6MjA2NjgyNjEwMH0.brqbZ01ssOwzPcD7T-9pToO0dRe0VerB00_c_nyrwAQ'
 
-  tickerCIKDict = getCIKByTicker(['NVDA','AAPL']); // takes in unfiltered data, and outputs CIK lists
+const { buildQueryParams, getCompanyData } = require('../services/companyDataService');
+const { generateFile } = require('../services/fileExportService');
 
-  data = {}
+async function handleQueryRequest(req, res) {
 
-  for (const ticker in tickerCIKDict) {
+  const params = buildQueryParams(req.body);
 
-    data[ticker] = await getCompanyData(tickerCIKDict[ticker]); // get data 
+  const data = await getCompanyData(params);
 
-  }
-  console.log(data);
-  res.json({ 'data': data});
+  const [file, header, extension] = await generateFile(data, req.body.outputTypeInput.outputFormat);
 
-}
+  console.log(extension)
 
-async function getCompanyData(tickerCIK) {
+  res.attachment(`company_data${extension}`)
 
-  const response = await fetch(`https://data.sec.gov/api/xbrl/companyfacts/CIK${tickerCIK}.json`, {
-      method: 'GET',
-      headers: {
-        'User-Agent': 'adouangprachanh.hba2026@ivey.ca',
-        'Accept': 'text/html'
-      },
-  });
-
-  return await response.json();
+  /*res.setHeader('Content-Type', header);
+  res.setHeader('Content-Disposition', `attachment; filename="company_data${extension}"`);*/
+  res.send(file);
 
 }
 
-/*
-// get companyOptions for multi-select on front end
-app.get('/api/company-options', async (req, res) => {
-  const fetchCompanyOptions = async () => { // function to grab the data
-    const response = await fetch('https://www.sec.gov/files/company_tickers.json', {
-      headers: {
-        'User-Agent': 'adouangprachanh.hba2026@ivey.ca'
-      }
-    });
-    return await response.json(); // return data
-  }; 
-  // try to grab data
-  try {
-    // turn data into options list
-    const companyOptions = await fetchCompanyOptions().then(data => 
-      Object.values(data).map(({ticker, title}) => ({
-        value: ticker,
-        label: title
-      }))
-    );
-    // send data back
-    res.json({ options: companyOptions});
-
-  } catch (error) {// catching errors
-    res.status(500).json({ error: 'Failed to fetch SEC data' });
-
-  }
-});
-*/
-
-module.exports = { handleDataRequest };
+module.exports = { handleQueryRequest };

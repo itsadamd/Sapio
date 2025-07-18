@@ -49,6 +49,19 @@ function Input({ onSubmit }) {
         }
     });
 
+    function isInputValid() {
+        if (formData.tickers == []) {
+            if (formData.endDate >= formData.startDate || formData.endFiscalYear > formData.startFiscalYear) {
+
+                return false;
+
+            }
+        }
+
+        return true;
+
+    }
+
     /**
      * Handles form submission by preventing default behavior
      * and passing the current form data up to the parent component.
@@ -72,25 +85,32 @@ function Input({ onSubmit }) {
 
     return (
         <>
-            <h3>Date Input:</h3>
+        <h2 className="text-gray-700 font-medium text-left py-6">Step 1: Enter Date Range</h2>
             <DateInput 
                 formData={formData.dateInput}
                 onChange={(data) => handleChange("dateInput", data)}
             />
 
-            <h3>Ticker Inputs:</h3>
+        <h2 className="text-gray-700 font-medium text-left py-6">Step 2: Enter Tickers to Search</h2>
             <TickerInput 
                 formData={formData.tickerInput}
-                onChange={(data) => handleChange("tickerInput", data)} // Fixed typo here
+                onChange={(data) => handleChange("tickerInput", data)}
             />
 
-            <h3>Choose output type:</h3>
+        <h2 className="text-gray-700 font-medium text-left py-6">Step 3: Choose Output Type</h2>
             <OutputTypeInput 
                 formData={formData.outputTypeInput}
                 onChange={(data) => handleChange("outputTypeInput", data)}
             />
 
-            <button onClick={handleSubmit}>Request data</button>
+        <div className="flex justify-center mt-6">
+        <button
+            onClick={handleSubmit}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+            Request Data
+        </button>
+        </div>
         </>
     );
 }
